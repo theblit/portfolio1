@@ -1,0 +1,14 @@
+# nixpacks.toml - Configuration Nixpacks pour Railway
+name = "portfolio-frontend"
+
+[phases.setup]
+nixPkgs = ["nodejs_22"]
+
+[phases.install]
+cmds = ["cd frontend && npm install"]
+
+[phases.build]
+cmds = ["cd frontend && npm run build"]
+
+[start]
+cmd = "cd frontend && node dist/portfolio/server/server.mjs"
