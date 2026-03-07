@@ -1,0 +1,10 @@
+{
+  "monorepoRoot": true,
+  "projects": {
+    "frontend": {
+      "name": "portfolio-frontend",
+      "rootDirectory": "frontend",
+      "outputDirectory": "dist/portfolio/browser"
+    }
+  }
+}
