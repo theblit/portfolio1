@@ -1,11 +1,5 @@
 {
-  "monorepoRoot": true,
-  "projects": {
-    "frontend": {
-      "name": "portfolio-frontend",
-      "rootDirectory": "frontend",
-      "outputDirectory": "dist/portfolio/browser"
-    }
-  },
-  "_deployTimestamp": "2026-03-07T00:00:00Z"
+  "framework": "angular",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/portfolio/browser"
 }
