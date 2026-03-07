@@ -1,0 +1,13 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "cd frontend && npm run build",
+    "startCommand": "cd frontend && node dist/portfolio/server/server.mjs"
+  },
+  "deploy": {
+    "startCommand": "cd frontend && node dist/portfolio/server/server.mjs",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
