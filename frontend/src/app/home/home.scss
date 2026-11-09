@@ -605,6 +605,15 @@
   margin-bottom: 6px !important;
 }
 
+.cert__kind {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.certs {
+  max-height: none;
+}
+
 .cert__icon {
   display: grid;
   place-items: center;

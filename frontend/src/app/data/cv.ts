@@ -40,6 +40,9 @@ export interface Certification {
   title: string;
   issuer: string;
   detail: string;
+  /** Certificat, Badge, Examen… */
+  kind: string;
+  date?: string;
 }
 
 export interface SkillGroup {
@@ -197,14 +200,43 @@ export const CV = {
 
   certifications: <Certification[]>[
     {
+      title: 'Networking Academy Learn-A-Thon 2026',
+      issuer: 'Cisco Networking Academy',
+      kind: 'Badge',
+      date: 'Mars 2026',
+      detail: 'Participation à un Learn-A-Thon organisé par une Networking Academy locale.',
+    },
+    {
+      title: 'Computer Hardware Basics',
+      issuer: 'Cisco Networking Academy',
+      kind: 'Certificat et badge',
+      date: 'Février 2026',
+      detail: 'Composants d’un ordinateur, assemblage, ordinateurs portables, dépannage matériel de base.',
+    },
+    {
+      title: 'Networking Basics',
+      issuer: 'Cisco Networking Academy',
+      kind: 'Certificat et badge',
+      date: 'Février 2026',
+      detail: 'Fondamentaux des réseaux : protocole Internet, accès réseau, adressage, services réseau.',
+    },
+    {
+      title: 'Network Technician Career Path — examen',
+      issuer: 'Cisco Networking Academy',
+      kind: 'Examen réussi, badge vérifié',
+      date: 'Février 2026',
+      detail: 'Validation des compétences de technicien réseau du parcours Cisco.',
+    },
+    {
       title: 'HCIA-Datacom V1.0 (préparation)',
       issuer: 'Huawei',
-      detail:
-        'Routage et commutation, VLAN, WLAN, STP, OSPF : les fondamentaux des réseaux d’entreprise Huawei.',
+      kind: 'Formation',
+      detail: 'Routage et commutation, VLAN, WLAN, STP, OSPF : les fondamentaux des réseaux d’entreprise Huawei.',
     },
     {
       title: 'General Knowledge of Computer Network',
       issuer: 'Huawei',
+      kind: 'Certification',
       detail: 'Modèles OSI et TCP/IP, adressage IP, topologies et équipements réseau.',
     },
   ],

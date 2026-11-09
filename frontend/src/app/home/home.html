@@ -256,7 +256,10 @@
                 <div class="cert__icon"><app-icon name="award" [size]="22" /></div>
                 <div>
                   <h4>{{ cert.title }}</h4>
-                  <p class="cert__issuer">{{ cert.issuer }}</p>
+                  <p class="cert__issuer">
+                    {{ cert.issuer }}
+                    <span class="cert__kind">· {{ cert.kind }}@if (cert.date) {, {{ cert.date }}}</span>
+                  </p>
                   <p class="cert__detail">{{ cert.detail }}</p>
                 </div>
               </article>
