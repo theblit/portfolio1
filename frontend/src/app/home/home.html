@@ -1,25 +1,498 @@
-<app-preloader/>
-<app-header/>
+<main id="contenu">
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="accueil">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container hero__inner">
+      <div class="hero__text">
+        <p class="eyebrow hero__eyebrow">
+          <span class="hero__dot" aria-hidden="true"></span>
+          En poste · {{ currentExperience.company }}
+        </p>
+        <h1 class="hero__title">{{ cv.fullName }}</h1>
+        <p class="hero__subtitle">{{ cv.title }}</p>
+        <p class="hero__tagline">{{ cv.tagline }}</p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary" (click)="go($event, 'contact')">Me contacter</a>
+          <a [href]="cv.file" target="_blank" rel="noopener" class="btn btn--outline">
+            <app-icon name="download" [size]="18" />
+            Télécharger mon CV
+          </a>
+        </div>
+        <div class="hero__social">
+          <a [href]="cv.linkedin" target="_blank" rel="noopener" class="icon-link" aria-label="Profil LinkedIn"><app-icon name="linkedin" /></a>
+          <a [href]="cv.github" target="_blank" rel="noopener" class="icon-link" aria-label="Profil GitHub"><app-icon name="github" /></a>
+          <a [href]="'mailto:' + cv.email" class="icon-link" aria-label="Envoyer un email"><app-icon name="mail" /></a>
+        </div>
+      </div>
 
+      <div class="hero__visual">
+        <div class="hero__photo">
+          <img [src]="cv.photo" [alt]="'Portrait de ' + cv.fullName" width="747" height="1024" fetchpriority="high" />
+        </div>
+        <div class="hero__badge hero__badge--1">
+          <app-icon name="headset" [size]="18" />
+          <span>Support N1 / N2</span>
+        </div>
+        <div class="hero__badge hero__badge--2">
+          <app-icon name="server" [size]="18" />
+          <span>Active Directory · M365</span>
+        </div>
+        <div class="hero__badge hero__badge--3">
+          <app-icon name="network" [size]="18" />
+          <span>Cisco · Huawei · VoIP</span>
+        </div>
+      </div>
+    </div>
 
-<main class="content center-main">
-    <app-introduction/>
-    <app-about/>
-    <app-fact/>
-    <app-service/>
-    <app-video/>
-    <app-portoflio/>
-    <app-project/>
-    <app-resume/>
-    <app-testimonial/>
-    <app-blog/>
-    <app-contact/>
-    <app-footer/>
+    <div class="container hero__facts">
+      <div class="fact">
+        <app-icon name="briefcase" [size]="20" />
+        <div>
+          <span class="fact__label">Poste actuel</span>
+          <span class="fact__value">{{ currentExperience.role }}, {{ currentExperience.company }}</span>
+        </div>
+      </div>
+      <div class="fact">
+        <app-icon name="school" [size]="20" />
+        <div>
+          <span class="fact__label">Formation</span>
+          <span class="fact__value">{{ currentEducation.title }}</span>
+        </div>
+      </div>
+      <div class="fact">
+        <app-icon name="pin" [size]="20" />
+        <div>
+          <span class="fact__label">Localisation</span>
+          <span class="fact__value">{{ cv.location }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- ========== À PROPOS ========== -->
+  <section class="section" id="a-propos">
+    <div class="container about">
+      <div class="about__body" appReveal>
+        <p class="eyebrow">À propos</p>
+        <h2>Qui suis-je ?</h2>
+        @for (paragraph of cv.bio; track $index) {
+          <p class="about__text">{{ paragraph }}</p>
+        }
+        <dl class="about__info">
+          <div>
+            <dt>Nom complet</dt>
+            <dd>{{ cv.legalName }}</dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a [href]="'mailto:' + cv.email">{{ cv.email }}</a></dd>
+          </div>
+          <div>
+            <dt>Téléphone</dt>
+            <dd><a [href]="phoneHref()">{{ cv.phone }}</a></dd>
+          </div>
+          <div>
+            <dt>Localisation</dt>
+            <dd>{{ cv.location }}</dd>
+          </div>
+          <div>
+            <dt>Langues</dt>
+            <dd>
+              @for (lang of cv.languages; track lang.name; let last = $last) {
+                {{ lang.name }}{{ last ? '' : ', ' }}
+              }
+            </dd>
+          </div>
+          <div>
+            <dt>Disponibilité</dt>
+            <dd>Abidjan et Grand-Bassam</dd>
+          </div>
+        </dl>
+        <div class="about__actions">
+          <a [href]="cv.file" target="_blank" rel="noopener" class="btn btn--primary">
+            <app-icon name="download" [size]="18" />
+            Télécharger mon CV
+          </a>
+          <a [href]="cv.linkedin" target="_blank" rel="noopener" class="btn btn--outline">LinkedIn</a>
+          <a [href]="cv.github" target="_blank" rel="noopener" class="btn btn--outline">GitHub</a>
+        </div>
+      </div>
+
+      <aside class="about__side" appReveal [revealDelay]="120">
+        <div class="card about__card">
+          <h3>Ce que j’apporte</h3>
+          <ul class="about__list">
+            @for (item of cv.softSkills; track item) {
+              <li><app-icon name="check" [size]="18" /> {{ item }}</li>
+            }
+          </ul>
+        </div>
+        <div class="card about__card about__card--accent">
+          <h3>Langues</h3>
+          <ul class="about__langs">
+            @for (lang of cv.languages; track lang.name) {
+              <li><strong>{{ lang.name }}</strong><span>{{ lang.level }}</span></li>
+            }
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========== EXPÉRIENCE ========== -->
+  <section class="section section--alt" id="experience">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Expérience</p>
+        <h2>Mon expérience professionnelle</h2>
+        <p class="section__desc">Du support utilisateur à l’administration du parc, en entreprise.</p>
+      </header>
+
+      @for (exp of cv.experiences; track exp.role + exp.company) {
+        <article class="card xp" appReveal>
+          <div class="xp__head">
+            <div class="xp__icon"><app-icon name="briefcase" [size]="24" /></div>
+            <div class="xp__title">
+              <h3>{{ exp.role }}</h3>
+              <p class="xp__company">
+                {{ exp.company }}
+                @if (exp.via) {
+                  <span class="xp__via">via {{ exp.via }}</span>
+                }
+              </p>
+            </div>
+            <div class="xp__meta">
+              <span class="chip" [class.chip--live]="exp.current">{{ exp.period }}</span>
+              <span class="chip chip--muted">{{ exp.kind }}</span>
+              <span class="chip chip--muted">{{ exp.location }}</span>
+            </div>
+          </div>
+          <p class="xp__summary">{{ exp.summary }}</p>
+          <ul class="xp__tasks">
+            @for (task of exp.tasks; track task) {
+              <li><app-icon name="check" [size]="16" /> {{ task }}</li>
+            }
+          </ul>
+          <ul class="chips">
+            @for (tag of exp.tags; track tag) {
+              <li class="chip">{{ tag }}</li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+  </section>
+
+  <!-- ========== PROJETS ========== -->
+  <section class="section" id="projets">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Projets</p>
+        <h2>Mes réalisations</h2>
+        <p class="section__desc">Projets personnels et académiques, de la téléphonie IP à la digitalisation d’une PME.</p>
+      </header>
+
+      <div class="projects">
+        @for (project of cv.projects; track project.title; let i = $index) {
+          <article class="card project" appReveal [revealDelay]="(i % 2) * 100">
+            <div class="project__top">
+              <div class="project__icon"><app-icon [name]="project.icon" [size]="24" /></div>
+              <div class="project__meta">
+                <span class="chip chip--muted">{{ project.kind }}</span>
+                <span class="project__period">{{ project.period }}</span>
+              </div>
+            </div>
+            <h3>{{ project.title }}</h3>
+            <p class="project__desc">{{ project.description }}</p>
+            <ul class="chips">
+              @for (tag of project.tags; track tag) {
+                <li class="chip">{{ tag }}</li>
+              }
+            </ul>
+            @if (project.github) {
+              <a [href]="project.github" target="_blank" rel="noopener" class="project__link">
+                <app-icon name="github" [size]="16" />
+                Voir le code sur GitHub
+                <app-icon name="external" [size]="14" />
+              </a>
+            }
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FORMATION ========== -->
+  <section class="section section--alt" id="formation">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Formation</p>
+        <h2>Parcours et certifications</h2>
+        <p class="section__desc">Un cursus orienté réseaux et télécommunications, complété par des certifications Huawei.</p>
+      </header>
+
+      <div class="formation">
+        <div appReveal>
+          <h3 class="formation__title"><app-icon name="school" [size]="20" /> Cursus</h3>
+          <ol class="timeline">
+            @for (edu of cv.education; track edu.title) {
+              <li class="timeline__item" [class.timeline__item--current]="edu.current">
+                <span class="timeline__period">{{ edu.period }}</span>
+                <h4>{{ edu.title }}</h4>
+                <p class="timeline__org">{{ edu.school }}</p>
+                @if (edu.detail) {
+                  <p class="timeline__detail">{{ edu.detail }}</p>
+                }
+              </li>
+            }
+          </ol>
+        </div>
+
+        <div appReveal [revealDelay]="120">
+          <h3 class="formation__title"><app-icon name="award" [size]="20" /> Certifications</h3>
+          <div class="certs">
+            @for (cert of cv.certifications; track cert.title) {
+              <article class="card cert">
+                <div class="cert__icon"><app-icon name="award" [size]="22" /></div>
+                <div>
+                  <h4>{{ cert.title }}</h4>
+                  <p class="cert__issuer">{{ cert.issuer }}</p>
+                  <p class="cert__detail">{{ cert.detail }}</p>
+                </div>
+              </article>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== COMPÉTENCES ========== -->
+  <section class="section" id="competences">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Compétences</p>
+        <h2>Compétences techniques</h2>
+        <p class="section__desc">Les technologies et outils que je maîtrise au quotidien.</p>
+      </header>
+
+      <div class="skills">
+        @for (group of cv.skillGroups; track group.label; let i = $index) {
+          <article class="card skill-group" appReveal [revealDelay]="(i % 3) * 80">
+            <div class="skill-group__head">
+              <span class="skill-group__icon"><app-icon [name]="group.icon" [size]="20" /></span>
+              <h3>{{ group.label }}</h3>
+            </div>
+            <ul class="chips">
+              @for (item of group.items; track item) {
+                <li class="chip chip--muted">{{ item }}</li>
+              }
+            </ul>
+          </article>
+        }
+        <article class="card skill-group skill-group--soft" appReveal [revealDelay]="240">
+          <div class="skill-group__head">
+            <span class="skill-group__icon"><app-icon name="globe" [size]="20" /></span>
+            <h3>Savoir-être</h3>
+          </div>
+          <ul class="chips">
+            @for (item of cv.softSkills; track item) {
+              <li class="chip">{{ item }}</li>
+            }
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SERVICES ========== -->
+  <section class="section section--alt" id="services">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Services</p>
+        <h2>Ce que je peux faire pour vous</h2>
+        <p class="section__desc">Pour une entreprise, une PME ou un particulier.</p>
+      </header>
+
+      <div class="services">
+        @for (svc of cv.services; track svc.title; let i = $index) {
+          <article class="card service" appReveal [revealDelay]="(i % 2) * 100">
+            <div class="service__icon"><app-icon [name]="svc.icon" [size]="26" /></div>
+            <h3>{{ svc.title }}</h3>
+            <p>{{ svc.description }}</p>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== VEILLE ========== -->
+  <section class="section" id="veille">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Veille</p>
+        <h2>Ce que je lis en ce moment</h2>
+        <p class="section__desc">Quelques articles qui nourrissent ma veille réseaux, cloud et cybersécurité.</p>
+      </header>
+
+      <div class="articles">
+        @for (article of cv.articles; track article.title; let i = $index) {
+          <a [href]="article.link" target="_blank" rel="noopener" class="card article" appReveal [revealDelay]="i * 100">
+            <div class="article__image">
+              <img [src]="article.image" alt="" width="160" height="160" loading="lazy" />
+            </div>
+            <div class="article__body">
+              <span class="article__meta">{{ article.source }} · {{ article.date }}</span>
+              <h3>{{ article.title }}</h3>
+              <span class="article__cta">Lire l’article <app-icon name="external" [size]="14" /></span>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section class="section section--alt" id="contact">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Contact</p>
+        <h2>Travaillons ensemble</h2>
+        <p class="section__desc">Un poste, une mission, une question ? Écrivez-moi, je réponds rapidement.</p>
+      </header>
+
+      <div class="contact">
+        <div class="card contact__form" appReveal>
+          @if (sent()) {
+            <div class="contact__success" role="status">
+              <app-icon name="check" [size]="40" />
+              <h3>@if (usesMailto) { Votre messagerie s’est ouverte } @else { Message envoyé ! }</h3>
+              <p>
+                @if (usesMailto) {
+                  Il ne reste qu’à cliquer sur « Envoyer » dans votre application mail. Si rien ne s’est ouvert,
+                  écrivez-moi directement à <a [href]="'mailto:' + cv.email">{{ cv.email }}</a>.
+                } @else {
+                  Merci pour votre message, je vous recontacte dans les plus brefs délais.
+                }
+              </p>
+              <button type="button" class="btn btn--outline" (click)="reset()">Écrire un autre message</button>
+            </div>
+          } @else {
+            <form #contactForm="ngForm" (ngSubmit)="submit(contactForm)" novalidate>
+              <div class="field-row">
+                <div class="field">
+                  <label for="name">Nom complet <span class="req" aria-hidden="true">*</span></label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autocomplete="name"
+                    required
+                    minlength="2"
+                    [(ngModel)]="form.name"
+                    #nameCtrl="ngModel"
+                    [class.is-invalid]="nameCtrl.invalid && (nameCtrl.touched || submitted())"
+                  />
+                  @if (nameCtrl.invalid && (nameCtrl.touched || submitted())) {
+                    <p class="field__error">Merci d'indiquer votre nom.</p>
+                  }
+                </div>
+                <div class="field">
+                  <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                    email
+                    [(ngModel)]="form.email"
+                    #emailCtrl="ngModel"
+                    [class.is-invalid]="emailCtrl.invalid && (emailCtrl.touched || submitted())"
+                  />
+                  @if (emailCtrl.invalid && (emailCtrl.touched || submitted())) {
+                    <p class="field__error">Merci d'indiquer une adresse email valide.</p>
+                  }
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="subject">Objet</label>
+                <input id="subject" name="subject" type="text" [(ngModel)]="form.subject" placeholder="Ex. : Opportunité de poste support IT" />
+              </div>
+
+              <div class="field">
+                <label for="message">Message <span class="req" aria-hidden="true">*</span></label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="6"
+                  required
+                  minlength="10"
+                  [(ngModel)]="form.message"
+                  #messageCtrl="ngModel"
+                  [class.is-invalid]="messageCtrl.invalid && (messageCtrl.touched || submitted())"
+                ></textarea>
+                @if (messageCtrl.invalid && (messageCtrl.touched || submitted())) {
+                  <p class="field__error">Votre message doit contenir au moins 10 caractères.</p>
+                }
+              </div>
+
+              <div class="field field--hp" aria-hidden="true">
+                <label for="website">Site web</label>
+                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" [(ngModel)]="honeypot" />
+              </div>
+
+              @if (error(); as err) {
+                <p class="form__error" role="alert">{{ err }}</p>
+              }
+
+              <button type="submit" class="btn btn--primary" [disabled]="sending()">
+                @if (sending()) {
+                  Envoi en cours…
+                } @else {
+                  Envoyer le message
+                  <app-icon name="send" [size]="18" />
+                }
+              </button>
+            </form>
+          }
+        </div>
+
+        <aside class="contact__info" appReveal [revealDelay]="120">
+          <div class="contact__item">
+            <span class="contact__icon"><app-icon name="mail" /></span>
+            <div>
+              <span class="contact__label">Email</span>
+              <a [href]="'mailto:' + cv.email">{{ cv.email }}</a>
+            </div>
+          </div>
+          <div class="contact__item">
+            <span class="contact__icon"><app-icon name="phone" /></span>
+            <div>
+              <span class="contact__label">Téléphone</span>
+              <a [href]="phoneHref()">{{ cv.phone }}</a>
+            </div>
+          </div>
+          <div class="contact__item">
+            <span class="contact__icon"><app-icon name="pin" /></span>
+            <div>
+              <span class="contact__label">Localisation</span>
+              <span class="contact__value">{{ cv.location }}</span>
+            </div>
+          </div>
+          <div class="contact__item">
+            <span class="contact__icon"><app-icon name="globe" /></span>
+            <div>
+              <span class="contact__label">Réseaux</span>
+              <div class="contact__links">
+                <a [href]="cv.linkedin" target="_blank" rel="noopener">LinkedIn</a>
+                <a [href]="cv.github" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
 </main>
-
-<!--To Top Link START-->
-<a href="#" class="toTop" id="return-to-top">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<!--To Top Link END-->
